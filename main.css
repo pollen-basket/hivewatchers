@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --vdp-bg-color: #ffffff;
+    --vdp-text-color: #000000;
+    --vdp-box-shadow: "";
+    --vdp-border-radius: 3px;
+    --vdp-heading-size: 2.5rem;
+    --vdp-heading-weight: bold;
+    --vdp-heading-hover-color: #eeeeee;
+    --vdp-arrow-color: currentColor;
+    --vdp-elem-color: currentColor;
+    --vdp-disabled-color: #d5d9e0;
+    --vdp-hover-color: #ffffff;
+    --vdp-hover-bg-color: #0baf74;
+    --vdp-selected-color: #ffffff;
+    --vdp-selected-bg-color: #0baf74;
+    --vdp-current-date-outline-color: #888888;
+    --vdp-current-date-font-weight: bold;
+    --vdp-elem-font-size: 0.8em;
+    --vdp-elem-border-radius: 3px;
+    --vdp-divider-color: #d5d9e0;
+}
