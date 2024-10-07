@@ -3,9 +3,15 @@
     <template #header>
       <div class="results-header">List of transactions</div>
     </template>
-    <div class="results-container">
+    <div class="results-preloader" v-if="isPageLoading">
+      <div class="mr-5">Loading</div>
+      <div class="loader"></div>
+    </div>
+    <div v-else class="results-container">
       <TransactionsRow
-        v-for="({ from, to, memo, timestamp, type, amount, amount_symbol, tx_id }, idx) in results"
+        v-for="(
+          { from, to, memo, timestamp, type, amount, amount_symbol, tx_id }, idx
+        ) in currentTransactions"
         :key="`${tx_id}-${idx}`"
         :from="from"
         :to="to"
@@ -15,13 +21,14 @@
         :amount="amount"
         :amount-symbol="amount_symbol"
       />
-      <div v-if="!results.length">No transactions with the given criteria</div>
+      <div v-if="!currentTransactions.length">No transactions with the given criteria</div>
     </div>
-    <template v-if="results.length" #footer>
+    <template v-if="currentTransactions.length" #footer>
       <div class="pagination">
         <vue-awesome-paginate
-          v-model="page"
-          :total-items="transactions.length"
+          v-model="transactionsCurrentPage"
+          @click="emitPage"
+          :total-items="transactionsTotalCount"
           :items-per-page="itemsPerPage"
           :max-pages-shown="5"
           :hide-prev-next-when-ends="true"
@@ -35,44 +42,42 @@
 </template>
 
 <script setup>
-import usePagination from '@/composables/usePagination.js'
 import { useMainStore } from '@/stores/mainStore.js'
 import TransactionsRow from '@/components/transactions/TransationsRow.vue'
-const { transactions } = storeToRefs(useMainStore())
+const { transactions, transactionsCurrentPage, transactionsTotalCount } =
+  storeToRefs(useMainStore())
 
-const isVisible = defineModel(false)
+const emit = defineEmits(['page'])
 
-const itemsPerPage = ref(50)
-let results = []
-let page = 1
+const isPageLoading = defineModel('isPageLoading', {
+  type: Boolean,
+  default: false
+})
 
-watch(
-  transactions,
-  () => {
-    if (transactions.value?.length) {
-      const { currentResults, currentPage } = usePagination([...transactions.value], itemsPerPage)
+const isVisible = defineModel('isVisible', {
+  type: Boolean,
+  default: true
+})
 
-      results = currentResults
-      page = currentPage
-    } else {
-      results = []
-    }
-  },
-  { immediate: true }
-)
+const currentTransactions = computed(() => transactions.value || [])
+const itemsPerPage = ref(30)
+
+const emitPage = (data) => {
+  emit('page', data)
+}
 
 defineExpose({ isVisible })
 </script>
 
 <style scoped>
-.results-header-logo {
-  @apply mx-auto w-[120px];
-}
 .results-header {
   @apply text-center text-[27px] font-semibold uppercase;
 }
 
 .results-container {
   @apply py-0 sm:py-6 sm:pl-12;
+}
+.results-preloader {
+  @apply w-full h-full flex items-center justify-center;
 }
 </style>
