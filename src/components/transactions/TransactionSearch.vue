@@ -116,7 +116,7 @@ const form = reactive({
   toAccount: '',
   memoId: '',
   requestId: '',
-  dateFrom: isoDate,
+  dateFrom: new Date(2017, 0, 1),
   dateTo: new Date(),
   operator: '',
   amount: '',

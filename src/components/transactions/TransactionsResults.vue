@@ -4,7 +4,7 @@
       <div class="results-header">List of transactions</div>
     </template>
     <div class="results-preloader" v-if="isPageLoading">
-      <div class="mr-5">Loading</div>
+      <div class="mb-4">Please wait a moment. The search is being processed.</div>
       <div class="loader"></div>
     </div>
     <div v-else class="results-container">
@@ -60,7 +60,7 @@ const isVisible = defineModel('isVisible', {
 })
 
 const currentTransactions = computed(() => transactions.value || [])
-const itemsPerPage = ref(30)
+const itemsPerPage = ref(50)
 
 const emitPage = (data) => {
   emit('page', data)
@@ -78,6 +78,6 @@ defineExpose({ isVisible })
   @apply py-0 sm:py-6 sm:pl-12;
 }
 .results-preloader {
-  @apply w-full h-full flex items-center justify-center;
+  @apply w-full h-full flex flex-col items-center justify-center;
 }
 </style>
