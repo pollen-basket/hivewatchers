@@ -15,6 +15,3 @@ app.use(router)
 app.use(VueAwesomePaginate)
 app.use(Markdown)
 app.mount('#app')
-
-// eslint-disable-next-line no-undef
-window.onload = () => particlesJS.load('particles-js', 'particles.json')

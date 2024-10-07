@@ -62,7 +62,7 @@ const buttonTypeClass = computed(() => {
   return `hive-preloader-button-${props.type}`
 })
 
-const emitClick = (ev) => {
+const emitClick = () => {
   isPreloading.value = true
   emit('preloader-button-click')
 }
@@ -113,39 +113,5 @@ const emitClick = (ev) => {
   @apply bg-hive-success-lighten;
 }
 
-.loader {
-  width: 25px;
-  aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(farthest-side, #ffffff 90%, #0000);
-  background:
-    var(--_g) 0 50%,
-    var(--_g) 50% 50%,
-    var(--_g) 50% 50%,
-    var(--_g) 100% 50%;
-  background-size: 25% 50%;
-  animation: l12 1s infinite linear;
-}
-@keyframes l12 {
-  33% {
-    background-position:
-      0 0,
-      50% 100%,
-      50% 100%,
-      100% 0;
-  }
-  66% {
-    background-position:
-      50% 0,
-      0 100%,
-      100% 100%,
-      50% 0;
-  }
-  100% {
-    background-position:
-      50% 50%,
-      0 50%,
-      100% 50%,
-      50% 50%;
-  }
-}
+
 </style>

@@ -32,7 +32,10 @@ export const useMainStore = defineStore('blacklist-store', {
     abuses: null,
     verifiedUsers: null,
     reports: null,
-    transactions: null
+    transactions: null,
+    transactionsCurrentPage: 1,
+    transactionsTotalCount: 1,
+    transactionsTotalPages: 1
   }),
   actions: {
     async getIP() {
@@ -139,7 +142,6 @@ export const useMainStore = defineStore('blacklist-store', {
       }
 
       this.reports = await reportRepo.find({ where: currentCriteria })
-
       this.isFetching = false
     },
 
@@ -166,13 +168,22 @@ export const useMainStore = defineStore('blacklist-store', {
     },
 
     async searchTransactions(query) {
-      this.transactions = []
       // TODO: Temporary solution until local Haf SQL will be implemented
-      const results = await axios.get(
-        'https://hive-api-production.up.railway.app/api/transactions',
-        { params: { ...query } }
-      )
-      this.transactions = results.data
+
+      try {
+        const results = await axios.get(
+          'https://hive-api-production-6b8d.up.railway.app/api/transactions',
+          { params: { ...query } }
+        )
+        this.transactionsCurrentPage = results.data.currentPage
+        this.transactionsTotalCount = results.data.totalCount
+        this.transactionsTotalPages = results.data.totalPages
+        this.transactions = results.data.data
+      } catch (err) {
+        if (err) {
+          this.transactions = [];
+        }
+      }
     }
   }
 })

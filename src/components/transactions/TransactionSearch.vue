@@ -83,7 +83,11 @@
         <FieldDescription>Condition for the amount value</FieldDescription>
       </div>
     </FormWrapper>
-    <TransactionsResults v-model="resultVisible"></TransactionsResults>
+    <TransactionsResults
+      @page="fetchResults"
+      v-model:is-page-loading="isPageLoading"
+      v-model="resultVisible"
+    ></TransactionsResults>
   </ViewContents>
 </template>
 
@@ -93,10 +97,16 @@ import datepicker from 'vue3-datepicker'
 import TransactionsResults from '@/components/transactions/TransactionsResults.vue'
 
 const isPosting = ref(false)
+const isPageLoading = ref(false)
 const store = useMainStore()
 
 const { searchTransactions } = store
 const resultVisible = ref(false)
+
+const date = new Date();
+date.setFullYear(date.getFullYear() - 1);
+const isoDate = date.toISOString();
+
 
 const form = reactive({
   type: '',
@@ -106,7 +116,7 @@ const form = reactive({
   toAccount: '',
   memoId: '',
   requestId: '',
-  dateFrom: new Date(),
+  dateFrom: isoDate,
   dateTo: new Date(),
   operator: '',
   amount: '',
@@ -202,6 +212,12 @@ const postSearchTransactions = async () => {
 
   isPosting.value = false
   resultVisible.value = true
+}
+
+const fetchResults = async (page) => {
+  isPageLoading.value = true
+  await searchTransactions({ ...form, page })
+  isPageLoading.value = false
 }
 </script>
 
